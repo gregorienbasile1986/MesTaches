@@ -1,0 +1,14 @@
+[
+    {
+        "texte": "course",
+        "terminee": true
+    },
+    {
+        "texte": "lecture",
+        "terminee": true
+    },
+    {
+        "texte": "apprendre python",
+        "terminee": false
+    }
+]
