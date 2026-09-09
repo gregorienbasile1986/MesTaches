@@ -28,7 +28,6 @@ android.minapi = 21
 
 android.skip_update = True
 
-android.sdk_path = $ANDROID_HOME
 
 p4a.branch = master
 

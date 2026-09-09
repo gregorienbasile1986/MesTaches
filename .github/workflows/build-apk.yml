@@ -38,11 +38,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install buildozer
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: ""
-
+      
       - name: Install Android SDK packages
         run: |
          sdkmanager --install "platform-tools" "platforms;android-33" "build-tools;35.0.0"
