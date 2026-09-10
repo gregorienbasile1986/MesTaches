@@ -28,6 +28,7 @@ android.minapi = 21
 
 android.skip_update = True
 
+android.sdk_path = /usr/local/lib/android/sdk
 
 p4a.branch = master
 
