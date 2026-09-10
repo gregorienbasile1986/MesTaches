@@ -44,7 +44,6 @@ jobs:
             cmake \
             libffi-dev \
             libssl-dev \
-            automake \
             autopoint \
             gettext
 
@@ -54,14 +53,9 @@ jobs:
           python -m pip install buildozer setuptools cython==0.29.34
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK packages
-        run: |
-          sdkmanager --install \
-            "platform-tools" \
-            "platforms;android-33" \
-            "build-tools;35.0.0"
+        uses: android-actions/setup-android@v4
+        with:
+          packages: "platform-tools platforms;android-33 build-tools;35.0.0"
 
       - name: Prepare SDK compatibility for Buildozer
         run: |
