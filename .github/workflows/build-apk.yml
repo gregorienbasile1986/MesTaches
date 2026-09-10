@@ -11,9 +11,10 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -23,7 +24,7 @@ jobs:
           python-version: "3.12"
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version: "17"
@@ -31,19 +32,51 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt update
-          sudo apt -y install automake libltdl-dev
+          sudo apt install -y \
+            automake \
+            libltdl-dev \
+            autoconf \
+            libtool \
+            pkg-config \
+            zlib1g-dev \
+            libncurses5-dev \
+            libncursesw5-dev \
+            cmake \
+            libffi-dev \
+            libssl-dev \
+            automake \
+            autopoint \
+            gettext
 
       - name: Install Buildozer
         run: |
           python -m pip install --upgrade pip
-          python -m pip install buildozer
+          python -m pip install buildozer setuptools cython==0.29.34
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
       - name: Install Android SDK packages
         run: |
-         sdkmanager --install "platform-tools" "platforms;android-33" "build-tools;35.0.0"
+          sdkmanager --install \
+            "platform-tools" \
+            "platforms;android-33" \
+            "build-tools;35.0.0"
+
+      - name: Prepare SDK compatibility for Buildozer
+        run: |
+          mkdir -p "$ANDROID_HOME/tools/bin"
+          ln -sf "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "$ANDROID_HOME/tools/bin/sdkmanager"
+
+          echo "SDK:"
+          echo "$ANDROID_HOME"
+
+          echo "sdkmanager:"
+          "$ANDROID_HOME/tools/bin/sdkmanager" --version
+
+          echo "AIDL:"
+          ls -l "$ANDROID_HOME/build-tools/35.0.0/aidl"
 
       - name: Build APK
         run: |
