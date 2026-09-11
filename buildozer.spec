@@ -8,7 +8,7 @@ package.domain = com.mestaches
 
 source.dir = .
 
-source.include_exts = py,png,jpg,kv,atlas
+source.include_exts = py,png,jpg,kv,atlas,json
 
 version = 1.0
 
@@ -26,7 +26,13 @@ android.api = 33
 
 android.minapi = 21
 
+android.ndk = 28c
+
 android.sdk_path = /usr/local/lib/android/sdk
+
+android.ndk_path = /usr/local/lib/android/sdk/ndk/28.2.13676358
+
+android.skip_update = True
 
 p4a.branch = master
 

@@ -11,10 +11,9 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -24,7 +23,7 @@ jobs:
           python-version: "3.12"
 
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: "17"
@@ -32,45 +31,39 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt update
-          sudo apt install -y \
-            automake \
-            libltdl-dev \
-            autoconf \
-            libtool \
-            pkg-config \
-            zlib1g-dev \
-            libncurses5-dev \
-            libncursesw5-dev \
-            cmake \
-            libffi-dev \
-            libssl-dev \
-            autopoint \
-            gettext
+          sudo apt -y install automake libltdl-dev
 
       - name: Install Buildozer
         run: |
           python -m pip install --upgrade pip
-          python -m pip install buildozer setuptools cython==0.29.34
+          python -m pip install buildozer
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
         with:
-          packages: "platform-tools platforms;android-33 build-tools;35.0.0"
+          packages: "platform-tools platforms;android-33 build-tools;35.0.0 ndk;28.2.13676358"
 
       - name: Prepare SDK compatibility for Buildozer
         run: |
-          mkdir -p "$ANDROID_HOME/tools/bin"
-          ln -sf "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
-            "$ANDROID_HOME/tools/bin/sdkmanager"
+          mkdir -p "$ANDROID_SDK_ROOT/tools/bin"
 
-          echo "SDK:"
-          echo "$ANDROID_HOME"
+          ln -sf \
+            "$ANDROID_SDK_ROOT/cmdline-tools/20.0/bin/sdkmanager" \
+            "$ANDROID_SDK_ROOT/tools/bin/sdkmanager"
+
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
 
           echo "sdkmanager:"
-          "$ANDROID_HOME/tools/bin/sdkmanager" --version
+          "$ANDROID_SDK_ROOT/tools/bin/sdkmanager" --version
 
           echo "AIDL:"
-          ls -l "$ANDROID_HOME/build-tools/35.0.0/aidl"
+          ls -l "$ANDROID_SDK_ROOT/build-tools/35.0.0/aidl"
+
+          echo "Android platform:"
+          ls -ld "$ANDROID_SDK_ROOT/platforms/android-33"
+
+          echo "Android NDK:"
+          ls -ld "$ANDROID_SDK_ROOT/ndk/28.2.13676358"
 
       - name: Build APK
         run: |
